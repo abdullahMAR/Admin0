@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Doctor - لوحة التحكم</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-box">
+            <h1>🏥 My Doctor</h1>
+            <p>لوحة تحكم المدراء</p>
+
+            <div id="loginAlert"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">اسم المستخدم</label>
+                    <input type="text" id="username" name="username" required value="admin">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" name="password" required value="admin123">
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    تسجيل الدخول
+                </button>
+            </form>
+
+            <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">
+                الحساب الافتراضي: admin / admin123
+            </p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <h2>🏥 My Doctor - لوحة التحكم</h2>
+            <div class="user-info">
+                <span id="adminUsername">المدير</span>
+                <button class="btn btn-danger btn-sm" onclick="logout()">تسجيل خروج</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>إجمالي الأطباء</h4>
+                    <div class="number" id="totalDoctors">0</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);">
+                    <h4>إجمالي العيادات</h4>
+                    <div class="number" id="totalClinics">0</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);">
+                    <h4>التخصصات</h4>
+                    <div class="number" id="totalSpecialties">0</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('doctors')">الأطباء</button>
+                <button class="tab" onclick="switchTab('clinics')">العيادات</button>
+                <button class="tab" onclick="switchTab('specialties')">التخصصات</button>
+            </div>
+
+            <!-- Doctors Tab -->
+            <div id="doctorsTab" class="tab-content active">
+                <div class="card">
+                    <h3>إضافة طبيب جديد</h3>
+                    <div id="doctorAlert"></div>
+
+                    <form id="doctorForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="doctorName">اسم الطبيب *</label>
+                                <input type="text" id="doctorName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="doctorSpecialty">التخصص *</label>
+                                <select id="doctorSpecialty" required>
+                                    <option value="">اختر التخصص</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="doctorPhone">رقم الهاتف</label>
+                                <input type="tel" id="doctorPhone" placeholder="+970599123456">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="doctorEmail">البريد الإلكتروني</label>
+                                <input type="email" id="doctorEmail">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="doctorBio">نبذة عن الطبيب</label>
+                            <input type="text" id="doctorBio" placeholder="مثال: أخصائي طب عام مع خبرة 10 سنوات">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">إضافة طبيب</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>قائمة الأطباء</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>التخصص</th>
+                                    <th>الهاتف</th>
+                                    <th>البريد الإلكتروني</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="doctorsTableBody">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; color: #9ca3af;">
+                                        جاري التحميل...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Clinics Tab -->
+            <div id="clinicsTab" class="tab-content">
+                <div class="card">
+                    <h3>إضافة عيادة جديدة</h3>
+                    <div id="clinicAlert"></div>
+
+                    <form id="clinicForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clinicDoctor">اختر الطبيب *</label>
+                                <select id="clinicDoctor" required>
+                                    <option value="">اختر طبيب</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="clinicName">اسم العيادة *</label>
+                                <input type="text" id="clinicName" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="clinicSearchAddress">🔍 ابحث عن الموقع (أسرع طريقة)</label>
+                            <div style="position: relative;">
+                                <input 
+                                    type="text" 
+                                    id="clinicSearchAddress" 
+                                    placeholder="اكتب اسم الشارع أو المنطقة أو المبنى..." 
+                                    autocomplete="off"
+                                    style="width: 100%;">
+                                <div id="searchSuggestions" style="
+                                    position: absolute;
+                                    top: 100%;
+                                    left: 0;
+                                    right: 0;
+                                    background: white;
+                                    border: 1px solid #e5e7eb;
+                                    border-top: none;
+                                    border-radius: 0 0 8px 8px;
+                                    max-height: 300px;
+                                    overflow-y: auto;
+                                    display: none;
+                                    z-index: 1000;
+                                "></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="clinicAddress">العنوان الكامل *</label>
+                            <input type="text" id="clinicAddress" required placeholder="سيتم ملؤه تلقائياً من البحث">
+                        </div>
+
+                        <div class="location-input">
+                            <div class="form-group">
+                                <label for="clinicLat">خط العرض *</label>
+                                <input type="number" step="any" id="clinicLat" required placeholder="31.9038" readonly style="background: #f3f4f6;">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="clinicLng">خط الطول *</label>
+                                <input type="number" step="any" id="clinicLng" required placeholder="35.2034" readonly style="background: #f3f4f6;">
+                            </div>
+                        </div>
+
+                        <div id="map"></div>
+                        <p style="font-size: 12px; color: #6b7280; margin-top: 10px;">
+                            💡 ابدأ بالبحث أعلاه - الخريطة والإحداثيات ستتحدث تلقائياً
+                        </p>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clinicPhone">رقم الهاتف</label>
+                                <input type="tel" id="clinicPhone">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="clinicHours">ساعات العمل</label>
+                                <input type="text" id="clinicHours" placeholder="8:00 ص - 4:00 م">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">إضافة عيادة</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>قائمة العيادات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>اسم العيادة</th>
+                                    <th>الطبيب</th>
+                                    <th>العنوان</th>
+                                    <th>الهاتف</th>
+                                    <th>ساعات العمل</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clinicsTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; color: #9ca3af;">
+                                        جاري التحميل...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Specialties Tab -->
+            <div id="specialtiesTab" class="tab-content">
+                <div class="card">
+                    <h3>إضافة تخصص جديد</h3>
+                    <div id="specialtyAlert"></div>
+
+                    <form id="specialtyForm">
+                        <div class="form-group">
+                            <label for="specialtyName">اسم التخصص *</label>
+                            <input type="text" id="specialtyName" required placeholder="مثال: طب عام، أسنان، عيون">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">إضافة تخصص</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>قائمة التخصصات</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>الرقم</th>
+                                    <th>التخصص</th>
+                                    <th>عدد الأطباء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="specialtiesTableBody">
+                                <tr>
+                                    <td colspan="3" style="text-align: center; color: #9ca3af;">
+                                        جاري التحميل...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Google Maps API -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSOCXV_5b8a7Om3F1UQY82ED-vjraBK0U&libraries=places"></script>
+
+    <!-- App Script -->
+    <script src="app.js"></script>
+</body>
+
+</html>
